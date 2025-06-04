@@ -1,0 +1,23 @@
+name: Insecure CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  insecure-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Print Secrets (Bad Practice)
+      run: |
+        echo "API_KEY=${{ secrets.API_KEY }}"  # Secrets should never be printed!
+
+    - name: Run Unvalidated Input
+      run: |
+        echo "Enter command:"
+        read cmd
+        eval $cmd  # Dangerous: allows arbitrary command execution!
